@@ -305,29 +305,29 @@ export default function Home() {
 
       {/* Hero */}
       <section className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 pt-20">
-        <div className="flex flex-col items-center w-full max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.88 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-8 md:mb-12"
-          >
-            <SpinningCube />
-          </motion.div>
-
-          <div className="text-center">
+        <div className="flex flex-col md:flex-row items-center justify-between w-full max-w-7xl mx-auto gap-8 md:gap-16">
+          <div className="text-center md:text-left md:flex-1">
             <RevealText delay={0.3}>
-              <h1 className="text-5xl md:text-8xl font-light tracking-tighter mb-6">
+              <h1 className="text-5xl md:text-7xl font-light tracking-tighter mb-6">
                 We build <span className="text-white/35 italic">ideas.</span>
               </h1>
             </RevealText>
             <RevealText delay={0.5}>
-              <p className="text-lg md:text-xl text-white/45 font-light max-w-xl mx-auto leading-relaxed">
+              <p className="text-lg md:text-xl text-white/45 font-light max-w-xl mx-auto md:mx-0 leading-relaxed">
                 A solo creative studio crafting websites, apps, and brands that make people stop
                 and stare. Sharp, self-aware, and quietly confident.
               </p>
             </RevealText>
           </div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.88 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="md:flex-1 flex justify-center"
+          >
+            <SpinningCube />
+          </motion.div>
         </div>
 
         <motion.div
