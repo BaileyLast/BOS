@@ -310,7 +310,7 @@ export default function Home() {
         <div className="flex flex-col md:flex-row items-center justify-between w-full max-w-7xl mx-auto gap-8 md:gap-16">
           <div className="text-center md:text-left md:flex-1">
             <RevealText delay={0.3}>
-              <h1 className="text-5xl md:text-7xl font-light tracking-tighter mb-6">
+              <h1 className="text-5xl md:text-7xl font-light tracking-tighter mb-6 whitespace-nowrap">
                 We build <span className="text-white/35 italic">ideas.</span>
               </h1>
             </RevealText>
