@@ -1,9 +1,16 @@
-import React, { useRef } from "react";
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
+import React from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValue,
+  useAnimationFrame,
+} from "framer-motion";
 import { ArrowRight, Code2, MonitorSmartphone, Sparkles, Layers, BoxSelect } from "lucide-react";
 
 const FACE_SIZE = 300;
 const HALF = FACE_SIZE / 2;
+const CUBE_SPIN_DURATION = 22000; // ms per full Y rotation
 
 const faces = [
   {
@@ -50,40 +57,79 @@ const faces = [
   },
 ];
 
+// Particle rings: inner (fast), middle, outer (slow)
 const ORBIT_PARTICLES = [
-  // Inner ring — tight, fast
-  ...Array.from({ length: 18 }, (_, i) => ({
+  ...Array.from({ length: 20 }, (_, i) => ({
     id: i,
-    angle: (i / 18) * 360,
-    radius: 175 + (i % 2) * 12,
+    startAngle: (i / 20) * 360,
+    baseRadius: 172 + (i % 3) * 10,
+    orbitalDuration: 9000 + (i % 4) * 1100,
     size: i % 5 === 0 ? 3 : 2,
-    duration: 10 + (i % 4) * 1.2,
-    delay: -(i * 0.7),
-    opacity: 0.18 + (i % 3) * 0.07,
+    opacity: 0.22 + (i % 3) * 0.07,
+    pushStrength: 38,
   })),
-  // Middle ring — medium
-  ...Array.from({ length: 24 }, (_, i) => ({
+  ...Array.from({ length: 26 }, (_, i) => ({
     id: 100 + i,
-    angle: (i / 24) * 360 + 7,
-    radius: 222 + (i % 3) * 14,
+    startAngle: (i / 26) * 360 + 7,
+    baseRadius: 220 + (i % 4) * 12,
+    orbitalDuration: 15000 + (i % 5) * 1600,
     size: i % 6 === 0 ? 4 : i % 3 === 0 ? 3 : 2,
-    duration: 16 + (i % 5) * 1.8,
-    delay: -(i * 0.9),
-    opacity: 0.12 + (i % 4) * 0.06,
+    opacity: 0.14 + (i % 4) * 0.05,
+    pushStrength: 44,
   })),
-  // Outer ring — slow, sparse, larger dots
-  ...Array.from({ length: 16 }, (_, i) => ({
+  ...Array.from({ length: 18 }, (_, i) => ({
     id: 200 + i,
-    angle: (i / 16) * 360 + 15,
-    radius: 268 + (i % 4) * 16,
+    startAngle: (i / 18) * 360 + 15,
+    baseRadius: 268 + (i % 4) * 14,
+    orbitalDuration: 23000 + (i % 6) * 2200,
     size: i % 3 === 0 ? 5 : 3,
-    duration: 24 + (i % 6) * 2.5,
-    delay: -(i * 1.5),
-    opacity: 0.08 + (i % 3) * 0.05,
+    opacity: 0.09 + (i % 3) * 0.04,
+    pushStrength: 52,
   })),
 ];
 
-function OrbitParticle({ angle, radius, size, duration, delay, opacity }: typeof ORBIT_PARTICLES[0]) {
+type ParticleProps = (typeof ORBIT_PARTICLES)[0] & {
+  cubeAngle: ReturnType<typeof useMotionValue<number>>;
+};
+
+function OrbitParticle({
+  startAngle,
+  baseRadius,
+  orbitalDuration,
+  size,
+  opacity,
+  pushStrength,
+  cubeAngle,
+}: ParticleProps) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  useAnimationFrame((t) => {
+    // Current orbital position (0–360°), offset by startAngle for initial spread
+    const orbitalAngleDeg =
+      (startAngle + (t / orbitalDuration) * 360) % 360;
+    const orbitalAngleRad = (orbitalAngleDeg * Math.PI) / 180;
+
+    // Current cube Y rotation (0–360°). Cube has 4 faces every 90°.
+    const ca = ((cubeAngle.get() % 360) + 360) % 360;
+
+    // Compute push: for each of the 4 cube faces, check angular proximity
+    let maxPush = 0;
+    for (let face = 0; face < 4; face++) {
+      const faceAngleDeg = (ca + face * 90) % 360;
+      let diff = Math.abs(orbitalAngleDeg - faceAngleDeg);
+      if (diff > 180) diff = 360 - diff;
+      // Influence zone: 55° half-width, smooth falloff
+      const normalised = Math.max(0, 1 - diff / 55);
+      const push = normalised * normalised * pushStrength;
+      if (push > maxPush) maxPush = push;
+    }
+
+    const r = baseRadius + maxPush;
+    x.set(Math.cos(orbitalAngleRad) * r);
+    y.set(Math.sin(orbitalAngleRad) * r * 0.40);
+  });
+
   return (
     <motion.div
       className="absolute rounded-full bg-white pointer-events-none"
@@ -95,35 +141,31 @@ function OrbitParticle({ angle, radius, size, duration, delay, opacity }: typeof
         marginTop: -size / 2,
         marginLeft: -size / 2,
         opacity,
-      }}
-      animate={{
-        rotate: [angle, angle + 360],
-        x: [
-          Math.cos((angle * Math.PI) / 180) * radius,
-          Math.cos(((angle + 360) * Math.PI) / 180) * radius,
-        ],
-        y: [
-          Math.sin((angle * Math.PI) / 180) * radius * 0.38,
-          Math.sin(((angle + 360) * Math.PI) / 180) * radius * 0.38,
-        ],
-      }}
-      transition={{
-        duration,
-        repeat: Infinity,
-        ease: "linear",
-        delay,
+        x,
+        y,
       }}
     />
   );
 }
 
 function SpinningCube() {
+  // Shared motion value: cube Y angle in degrees (0 → ∞, modulo 360 for faces)
+  const cubeAngle = useMotionValue(0);
+
+  useAnimationFrame((t) => {
+    cubeAngle.set((t / CUBE_SPIN_DURATION) * 360);
+  });
+
+  // Drive cube rotation from the shared clock for perfect sync
+  const rotateY = useTransform(cubeAngle, (a) => a % 360);
+  const rotateX = useTransform(cubeAngle, (a) => 15 + (a / 360) * 360);
+
   return (
     <div
       className="relative flex items-center justify-center select-none"
-      style={{ width: 660, height: 660 }}
+      style={{ width: 680, height: 680 }}
     >
-      {/* Deep halo glow */}
+      {/* Halo */}
       <motion.div
         className="absolute rounded-full pointer-events-none"
         style={{
@@ -137,7 +179,7 @@ function SpinningCube() {
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* Pulse ring */}
+      {/* Pulse rings */}
       <motion.div
         className="absolute rounded-full border border-white/[0.06] pointer-events-none"
         style={{ width: 380, height: 380 }}
@@ -151,45 +193,42 @@ function SpinningCube() {
         transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
       />
 
-      {/* Orbit particles */}
+      {/* Orbit particles — physics-aware */}
       {ORBIT_PARTICLES.map((p) => (
-        <OrbitParticle key={p.id} {...p} />
+        <OrbitParticle key={p.id} {...p} cubeAngle={cubeAngle} />
       ))}
 
-      {/* Ground reflection ellipse */}
+      {/* Ground reflection */}
       <motion.div
         className="absolute pointer-events-none"
         style={{
-          bottom: 18,
+          bottom: 20,
           left: "50%",
           transform: "translateX(-50%)",
           width: 200,
           height: 28,
-          background: "radial-gradient(ellipse, rgba(255,255,255,0.07) 0%, transparent 70%)",
+          background:
+            "radial-gradient(ellipse, rgba(255,255,255,0.07) 0%, transparent 70%)",
           filter: "blur(8px)",
         }}
         animate={{ opacity: [0.5, 0.9, 0.5] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* Bob + spin wrapper */}
+      {/* Cube — bob wrapper */}
       <motion.div
-        style={{ width: FACE_SIZE, height: FACE_SIZE, perspective: 1400 }}
+        className="absolute"
+        style={{
+          width: FACE_SIZE,
+          height: FACE_SIZE,
+          perspective: 1400,
+        }}
         animate={{ y: [0, -14, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
       >
         <motion.div
           className="relative w-full h-full"
-          style={{ transformStyle: "preserve-3d" }}
-          animate={{
-            rotateX: [15, 375],
-            rotateY: [0, 360],
-          }}
-          transition={{
-            duration: 22,
-            repeat: Infinity,
-            ease: "linear",
-          }}
+          style={{ transformStyle: "preserve-3d", rotateY, rotateX }}
         >
           {faces.map((face, i) => (
             <div
@@ -203,7 +242,6 @@ function SpinningCube() {
                 boxShadow: `inset 0 0 40px ${face.glow}, 0 0 20px ${face.glow}`,
               }}
             >
-              {/* Shimmer overlay */}
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
@@ -244,7 +282,6 @@ export function LandingPage() {
 
   return (
     <div className="min-h-[100dvh] bg-[#0a0a0a] text-white selection:bg-white/20 font-sans overflow-x-hidden">
-      {/* Noise texture */}
       <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.025] mix-blend-screen">
         <div
           className="absolute inset-0"
@@ -263,7 +300,6 @@ export function LandingPage() {
         }}
       />
 
-      {/* Navbar */}
       <nav className="fixed top-0 w-full z-50 mix-blend-difference">
         <div className="max-w-7xl mx-auto px-6 py-8 flex justify-between items-center">
           <div className="text-sm font-medium tracking-widest uppercase">Box of Sparks</div>
@@ -283,7 +319,7 @@ export function LandingPage() {
             initial={{ opacity: 0, scale: 0.88 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-12 md:mb-16"
+            className="mb-8 md:mb-12"
           >
             <SpinningCube />
           </motion.div>
