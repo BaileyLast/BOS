@@ -6,58 +6,51 @@ import {
   useMotionValue,
   useAnimationFrame,
 } from "framer-motion";
-import { ArrowRight, Code2, MonitorSmartphone, Sparkles, Layers, BoxSelect } from "lucide-react";
+import {
+  ArrowRight,
+  Code2,
+  MonitorSmartphone,
+  Sparkles,
+  Layers,
+  BoxSelect,
+  ShoppingBag,
+  Smartphone,
+  Cpu,
+  Zap,
+} from "lucide-react";
 
+// ─── Octahedron geometry ───────────────────────────────────────────────────
+// A regular octahedron has 8 equilateral-triangle faces.
+// Face normals are (±1,±1,±1)/√3.
+//
+// CSS transform: rotateY(α) rotateX(β) translateZ(r)
+// gives face-center at r·(cosβ·sinα, -sinβ, cosβ·cosα) = r·(nx,ny,nz)
+//   → α = atan2(nx, nz),  β = arcsin(−ny)
+//
+// For R_face = 120 (circumradius of each equilateral face) in a 300×300 div:
+//   edge  a = R_face·√3 ≈ 207.8 px
+//   inradius r = a/√6  ≈  84.8 px  → we use 85
+// Clip-path: upward triangle centered in 300×300:
+//   apex  (50%, 10%), BL (15.37%, 70%), BR (84.63%, 70%)
+
+const OA = 35.264; // arcsin(1/√3) in degrees
+const OCT_R = 85;  // octahedron inradius (translateZ distance)
 const FACE_SIZE = 300;
-const HALF = FACE_SIZE / 2;
-const CUBE_SPIN_DURATION = 22000; // ms per full Y rotation
+const TRIANGLE_CLIP = "polygon(50% 10%, 15.37% 70%, 84.63% 70%)";
+const CUBE_SPIN_MS = 22000;
 
-const faces = [
-  {
-    transform: `translateZ(${HALF}px)`,
-    label: "Websites",
-    icon: <MonitorSmartphone className="w-10 h-10 mb-5" strokeWidth={1} />,
-    bg: "rgba(255,255,255,0.07)",
-    glow: "rgba(200,220,255,0.18)",
-  },
-  {
-    transform: `rotateY(180deg) translateZ(${HALF}px)`,
-    label: "Apps",
-    icon: <Code2 className="w-10 h-10 mb-5" strokeWidth={1} />,
-    bg: "rgba(255,255,255,0.05)",
-    glow: "rgba(255,200,200,0.16)",
-  },
-  {
-    transform: `rotateY(90deg) translateZ(${HALF}px)`,
-    label: "Brands",
-    icon: <BoxSelect className="w-10 h-10 mb-5" strokeWidth={1} />,
-    bg: "rgba(255,255,255,0.06)",
-    glow: "rgba(200,255,230,0.14)",
-  },
-  {
-    transform: `rotateY(-90deg) translateZ(${HALF}px)`,
-    label: "Ideas",
-    icon: <Sparkles className="w-10 h-10 mb-5" strokeWidth={1} />,
-    bg: "rgba(255,255,255,0.06)",
-    glow: "rgba(220,200,255,0.18)",
-  },
-  {
-    transform: `rotateX(90deg) translateZ(${HALF}px)`,
-    label: "Box of",
-    icon: <Layers className="w-10 h-10 mb-5" strokeWidth={1} />,
-    bg: "rgba(255,255,255,0.04)",
-    glow: "rgba(255,255,200,0.12)",
-  },
-  {
-    transform: `rotateX(-90deg) translateZ(${HALF}px)`,
-    label: "Sparks",
-    icon: <Sparkles className="w-10 h-10 mb-5" strokeWidth={1} />,
-    bg: "rgba(255,255,255,0.04)",
-    glow: "rgba(255,220,180,0.12)",
-  },
+const FACE_DEFS = [
+  { ry:    45, rx: -OA, label: "Websites",   Icon: MonitorSmartphone, glow: "rgba(200,220,255,0.22)" },
+  { ry:   135, rx: -OA, label: "Web Apps",   Icon: Code2,             glow: "rgba(180,255,210,0.18)" },
+  { ry:    45, rx: +OA, label: "Brands",     Icon: BoxSelect,         glow: "rgba(255,200,200,0.20)" },
+  { ry:   135, rx: +OA, label: "E-Commerce", Icon: ShoppingBag,       glow: "rgba(255,230,170,0.18)" },
+  { ry:   -45, rx: -OA, label: "Mobile",     Icon: Smartphone,        glow: "rgba(220,200,255,0.22)" },
+  { ry:  -135, rx: -OA, label: "AI Features",Icon: Cpu,               glow: "rgba(170,255,255,0.18)" },
+  { ry:   -45, rx: +OA, label: "Motion",     Icon: Sparkles,          glow: "rgba(255,210,255,0.18)" },
+  { ry:  -135, rx: +OA, label: "Whatever",   Icon: Zap,               glow: "rgba(255,255,180,0.16)" },
 ];
 
-// Particle rings: inner (fast), middle, outer (slow)
+// ─── Particle rings ────────────────────────────────────────────────────────
 const ORBIT_PARTICLES = [
   ...Array.from({ length: 20 }, (_, i) => ({
     id: i,
@@ -105,29 +98,24 @@ function OrbitParticle({
   const y = useMotionValue(0);
 
   useAnimationFrame((t) => {
-    // Current orbital position (0–360°), offset by startAngle for initial spread
-    const orbitalAngleDeg =
-      (startAngle + (t / orbitalDuration) * 360) % 360;
+    const orbitalAngleDeg = (startAngle + (t / orbitalDuration) * 360) % 360;
     const orbitalAngleRad = (orbitalAngleDeg * Math.PI) / 180;
 
-    // Current cube Y rotation (0–360°). Cube has 4 faces every 90°.
+    // Octahedron has 4 equatorial vertices at 0°, 90°, 180°, 270° of Y rotation.
+    // As each vertex sweeps past a particle it pushes it outward.
     const ca = ((cubeAngle.get() % 360) + 360) % 360;
-
-    // Compute push: for each of the 4 cube faces, check angular proximity
     let maxPush = 0;
-    for (let face = 0; face < 4; face++) {
-      const faceAngleDeg = (ca + face * 90) % 360;
-      let diff = Math.abs(orbitalAngleDeg - faceAngleDeg);
+    for (let v = 0; v < 4; v++) {
+      const vertexAngle = (ca + v * 90) % 360;
+      let diff = Math.abs(orbitalAngleDeg - vertexAngle);
       if (diff > 180) diff = 360 - diff;
-      // Influence zone: 55° half-width, smooth falloff
-      const normalised = Math.max(0, 1 - diff / 55);
-      const push = normalised * normalised * pushStrength;
+      const push = Math.max(0, 1 - diff / 55) ** 2 * pushStrength;
       if (push > maxPush) maxPush = push;
     }
 
     const r = baseRadius + maxPush;
     x.set(Math.cos(orbitalAngleRad) * r);
-    y.set(Math.sin(orbitalAngleRad) * r * 0.40);
+    y.set(Math.sin(orbitalAngleRad) * r * 0.4);
   });
 
   return (
@@ -148,15 +136,13 @@ function OrbitParticle({
   );
 }
 
-function SpinningCube() {
-  // Shared motion value: cube Y angle in degrees (0 → ∞, modulo 360 for faces)
+// ─── Spinning octahedron ───────────────────────────────────────────────────
+function SpinningOctahedron() {
   const cubeAngle = useMotionValue(0);
-
   useAnimationFrame((t) => {
-    cubeAngle.set((t / CUBE_SPIN_DURATION) * 360);
+    cubeAngle.set((t / CUBE_SPIN_MS) * 360);
   });
 
-  // Drive cube rotation from the shared clock for perfect sync
   const rotateY = useTransform(cubeAngle, (a) => a % 360);
   const rotateX = useTransform(cubeAngle, (a) => 15 + (a / 360) * 360);
 
@@ -169,10 +155,8 @@ function SpinningCube() {
       <motion.div
         className="absolute rounded-full pointer-events-none"
         style={{
-          width: 420,
-          height: 420,
-          background:
-            "radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 40%, transparent 70%)",
+          width: 420, height: 420,
+          background: "radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 40%, transparent 70%)",
           filter: "blur(32px)",
         }}
         animate={{ scale: [1, 1.08, 1], opacity: [0.6, 1, 0.6] }}
@@ -193,7 +177,7 @@ function SpinningCube() {
         transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
       />
 
-      {/* Orbit particles — physics-aware */}
+      {/* Orbit particles */}
       {ORBIT_PARTICLES.map((p) => (
         <OrbitParticle key={p.id} {...p} cubeAngle={cubeAngle} />
       ))}
@@ -202,27 +186,19 @@ function SpinningCube() {
       <motion.div
         className="absolute pointer-events-none"
         style={{
-          bottom: 20,
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: 200,
-          height: 28,
-          background:
-            "radial-gradient(ellipse, rgba(255,255,255,0.07) 0%, transparent 70%)",
+          bottom: 20, left: "50%", transform: "translateX(-50%)",
+          width: 200, height: 28,
+          background: "radial-gradient(ellipse, rgba(255,255,255,0.07) 0%, transparent 70%)",
           filter: "blur(8px)",
         }}
         animate={{ opacity: [0.5, 0.9, 0.5] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* Cube — bob wrapper */}
+      {/* Octahedron — bob wrapper */}
       <motion.div
         className="absolute"
-        style={{
-          width: FACE_SIZE,
-          height: FACE_SIZE,
-          perspective: 1400,
-        }}
+        style={{ width: FACE_SIZE, height: FACE_SIZE, perspective: 1400 }}
         animate={{ y: [0, -14, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
       >
@@ -230,29 +206,30 @@ function SpinningCube() {
           className="relative w-full h-full"
           style={{ transformStyle: "preserve-3d", rotateY, rotateX }}
         >
-          {faces.map((face, i) => (
+          {FACE_DEFS.map((f, i) => (
             <div
               key={i}
-              className="absolute inset-0 flex flex-col items-center justify-center"
+              className="absolute inset-0 flex items-center justify-center"
               style={{
-                transform: face.transform,
-                background: face.bg,
-                backdropFilter: "blur(12px)",
-                border: "1px solid rgba(255,255,255,0.15)",
-                boxShadow: `inset 0 0 40px ${face.glow}, 0 0 20px ${face.glow}`,
+                transform: `rotateY(${f.ry}deg) rotateX(${f.rx}deg) translateZ(${OCT_R}px)`,
+                clipPath: TRIANGLE_CLIP,
+                background: `rgba(255,255,255,0.06)`,
+                backdropFilter: "blur(14px)",
+                boxShadow: `inset 0 0 50px ${f.glow}, 0 0 24px ${f.glow}`,
               }}
             >
+              {/* Shimmer gradient */}
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background:
-                    "linear-gradient(135deg, rgba(255,255,255,0.07) 0%, transparent 50%, rgba(255,255,255,0.03) 100%)",
+                  background: "linear-gradient(135deg, rgba(255,255,255,0.10) 0%, transparent 50%, rgba(255,255,255,0.04) 100%)",
                 }}
               />
-              <div className="relative z-10 flex flex-col items-center text-white/80">
-                {face.icon}
-                <span className="text-lg font-extralight tracking-[0.3em] uppercase">
-                  {face.label}
+              {/* Content — nudge down into the triangle's visual center */}
+              <div className="relative z-10 flex flex-col items-center text-white/85 mt-8">
+                <f.Icon className="w-8 h-8 mb-3" strokeWidth={1} />
+                <span className="text-[11px] font-light tracking-[0.3em] uppercase whitespace-nowrap">
+                  {f.label}
                 </span>
               </div>
             </div>
@@ -263,6 +240,7 @@ function SpinningCube() {
   );
 }
 
+// ─── Helpers ───────────────────────────────────────────────────────────────
 function RevealText({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   return (
     <motion.div
@@ -276,12 +254,14 @@ function RevealText({ children, delay = 0 }: { children: React.ReactNode; delay?
   );
 }
 
+// ─── Page ──────────────────────────────────────────────────────────────────
 export function LandingPage() {
   const { scrollYProgress } = useScroll();
   const yBackground = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
   return (
     <div className="min-h-[100dvh] bg-[#0a0a0a] text-white selection:bg-white/20 font-sans overflow-x-hidden">
+      {/* Noise texture */}
       <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.025] mix-blend-screen">
         <div
           className="absolute inset-0"
@@ -294,19 +274,16 @@ export function LandingPage() {
       <motion.div
         className="fixed top-0 left-0 right-0 h-[600px] pointer-events-none z-0"
         style={{
-          background:
-            "radial-gradient(circle at 50% 0%, rgba(255,255,255,0.035) 0%, transparent 70%)",
+          background: "radial-gradient(circle at 50% 0%, rgba(255,255,255,0.035) 0%, transparent 70%)",
           y: yBackground,
         }}
       />
 
+      {/* Navbar */}
       <nav className="fixed top-0 w-full z-50 mix-blend-difference">
         <div className="max-w-7xl mx-auto px-6 py-8 flex justify-between items-center">
           <div className="text-sm font-medium tracking-widest uppercase">Box of Sparks</div>
-          <a
-            href="#contact"
-            className="text-sm font-medium tracking-widest uppercase hover:opacity-70 transition-opacity"
-          >
+          <a href="#contact" className="text-sm font-medium tracking-widest uppercase hover:opacity-70 transition-opacity">
             Contact
           </a>
         </div>
@@ -321,7 +298,7 @@ export function LandingPage() {
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             className="mb-8 md:mb-12"
           >
-            <SpinningCube />
+            <SpinningOctahedron />
           </motion.div>
 
           <div className="text-center">
@@ -348,7 +325,7 @@ export function LandingPage() {
           <span className="text-xs tracking-widest uppercase mb-4">Scroll</span>
           <motion.div
             className="w-[1px] h-12 bg-gradient-to-b from-white/30 to-transparent"
-            animate={{ scaleY: [0, 1, 0], originY: 0 }}
+            animate={{ scaleY: [0, 1, 0] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
           />
         </motion.div>
@@ -364,7 +341,6 @@ export function LandingPage() {
               <span className="text-white">One mind. Zero friction.</span>
             </h2>
           </RevealText>
-
           <div className="grid md:grid-cols-2 gap-12 md:gap-24">
             {[
               {
@@ -396,36 +372,24 @@ export function LandingPage() {
               Capabilities
             </div>
           </RevealText>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-y-16 gap-x-8 border-t border-white/10 pt-16">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-y-16 gap-x-6 border-t border-white/10 pt-16">
             {[
-              {
-                title: "Digital Experiences",
-                desc: "Websites that break the mold. Cinematic, performant, and emotionally resonant. From landing pages to immersive brand storytelling.",
-                icon: <MonitorSmartphone className="w-6 h-6" strokeWidth={1} />,
-              },
-              {
-                title: "Application Design",
-                desc: "Complex data made simple. Dashboards and tools that feel intuitive, snappy, and a joy to use. Utility without the sterility.",
-                icon: <Code2 className="w-6 h-6" strokeWidth={1} />,
-              },
-              {
-                title: "Brand Architecture",
-                desc: "Visual identities that scale. Typography, color theory, and motion systems that define how your product feels in the wild.",
-                icon: <BoxSelect className="w-6 h-6" strokeWidth={1} />,
-              },
+              { title: "Websites",    desc: "Cinematic, performant, emotionally resonant.",           Icon: MonitorSmartphone },
+              { title: "Web Apps",    desc: "Dashboards and SaaS tools that feel like products.",     Icon: Code2 },
+              { title: "Mobile",      desc: "iOS & Android experiences people want to open.",         Icon: Smartphone },
+              { title: "Brands",      desc: "Visual identities that scale and are remembered.",       Icon: BoxSelect },
+              { title: "E-Commerce",  desc: "Storefronts that convert without feeling like stores.",  Icon: ShoppingBag },
+              { title: "AI Features", desc: "Generative UI, smart integrations, chatbots.",           Icon: Cpu },
+              { title: "Motion",      desc: "Animated experiences and scroll storytelling.",          Icon: Sparkles },
+              { title: "Whatever",    desc: "The wildcard. Bring the brief.",                         Icon: Zap },
             ].map((item, idx) => (
-              <RevealText key={item.title} delay={idx * 0.12}>
-                <motion.div
-                  className="group cursor-default"
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="mb-6 text-white/25 group-hover:text-white/80 transition-colors duration-500">
-                    {item.icon}
+              <RevealText key={item.title} delay={idx * 0.06}>
+                <motion.div className="group cursor-default" whileHover={{ y: -4 }} transition={{ duration: 0.3 }}>
+                  <div className="mb-4 text-white/25 group-hover:text-white/80 transition-colors duration-500">
+                    <item.Icon className="w-5 h-5" strokeWidth={1} />
                   </div>
-                  <h4 className="text-2xl font-light mb-4">{item.title}</h4>
-                  <p className="text-white/35 leading-relaxed font-light group-hover:text-white/65 transition-colors duration-500">
+                  <h4 className="text-lg font-light mb-2">{item.title}</h4>
+                  <p className="text-white/30 text-sm leading-relaxed font-light group-hover:text-white/55 transition-colors duration-500">
                     {item.desc}
                   </p>
                 </motion.div>
@@ -462,17 +426,12 @@ export function LandingPage() {
                 Available for new projects
               </span>
             </div>
-
-            <h2 className="text-5xl md:text-8xl font-light tracking-tighter mb-12">
-              Start a fire.
-            </h2>
-
+            <h2 className="text-5xl md:text-8xl font-light tracking-tighter mb-12">Start a fire.</h2>
             <a
               href="mailto:hello@boxofsparks.com"
               className="inline-flex items-center gap-4 text-xl md:text-2xl font-light border-b border-white/25 pb-2 hover:border-white hover:gap-6 transition-all duration-300"
             >
-              hello@boxofsparks.com{" "}
-              <ArrowRight strokeWidth={1} className="w-6 h-6" />
+              hello@boxofsparks.com <ArrowRight strokeWidth={1} className="w-6 h-6" />
             </a>
           </RevealText>
         </div>
