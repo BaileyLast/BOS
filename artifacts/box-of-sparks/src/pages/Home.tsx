@@ -332,22 +332,6 @@ export default function Home() {
           </motion.div>
         </div>
 
-        <motion.div
-          className="absolute bottom-10 left-1/2 -translate-x-1/2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.8, duration: 1.4 }}
-        >
-          <div className="relative h-16 w-px overflow-hidden">
-            <div className="absolute inset-0 bg-white/10" />
-            <motion.div
-              className="absolute left-0 w-px bg-gradient-to-b from-transparent via-white/55 to-transparent"
-              style={{ height: "45%" }}
-              animate={{ top: ["-45%", "145%"] }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", repeatDelay: 0.5 }}
-            />
-          </div>
-        </motion.div>
       </section>
 
       {/* What We Do */}
