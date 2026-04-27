@@ -154,12 +154,14 @@ function OrbitParticle({
 // ─── Spinning cube ─────────────────────────────────────────────────────────
 function SpinningCube() {
   const cubeAngle = useMotionValue(0);
+  const cubeAngleX = useMotionValue(0);
   useAnimationFrame((t) => {
     cubeAngle.set((t / CUBE_SPIN_MS) * 360);
+    cubeAngleX.set((t / CUBE_SPIN_MS) * 360 * 0.618);
   });
 
   const rotateY = useTransform(cubeAngle, (a) => a % 360);
-  const rotateX = useTransform(cubeAngle, (a) => 15 + (a / 360) * 360);
+  const rotateX = useTransform(cubeAngleX, (a) => a % 360);
 
   return (
     <div
