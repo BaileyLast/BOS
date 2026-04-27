@@ -243,8 +243,8 @@ function SpinningCube() {
                 }}
               />
               <div className="relative z-10 flex flex-col items-center text-white/85 px-4">
-                <face.Icon className="w-10 h-10 mb-4" strokeWidth={1} />
-                <span className="text-xs font-extralight tracking-[0.2em] uppercase text-center leading-relaxed">
+                <face.Icon className="w-12 h-12 mb-5" strokeWidth={1} />
+                <span className="text-sm font-light tracking-[0.15em] uppercase text-center leading-relaxed">
                   {face.label}
                 </span>
               </div>
