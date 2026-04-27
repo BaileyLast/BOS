@@ -50,15 +50,38 @@ const faces = [
   },
 ];
 
-const ORBIT_PARTICLES = Array.from({ length: 12 }, (_, i) => ({
-  id: i,
-  angle: (i / 12) * 360,
-  radius: 210 + (i % 3) * 28,
-  size: i % 4 === 0 ? 4 : i % 3 === 0 ? 3 : 2,
-  duration: 14 + (i % 5) * 2.5,
-  delay: -(i * 1.2),
-  opacity: 0.15 + (i % 4) * 0.08,
-}));
+const ORBIT_PARTICLES = [
+  // Inner ring — tight, fast
+  ...Array.from({ length: 18 }, (_, i) => ({
+    id: i,
+    angle: (i / 18) * 360,
+    radius: 175 + (i % 2) * 12,
+    size: i % 5 === 0 ? 3 : 2,
+    duration: 10 + (i % 4) * 1.2,
+    delay: -(i * 0.7),
+    opacity: 0.18 + (i % 3) * 0.07,
+  })),
+  // Middle ring — medium
+  ...Array.from({ length: 24 }, (_, i) => ({
+    id: 100 + i,
+    angle: (i / 24) * 360 + 7,
+    radius: 222 + (i % 3) * 14,
+    size: i % 6 === 0 ? 4 : i % 3 === 0 ? 3 : 2,
+    duration: 16 + (i % 5) * 1.8,
+    delay: -(i * 0.9),
+    opacity: 0.12 + (i % 4) * 0.06,
+  })),
+  // Outer ring — slow, sparse, larger dots
+  ...Array.from({ length: 16 }, (_, i) => ({
+    id: 200 + i,
+    angle: (i / 16) * 360 + 15,
+    radius: 268 + (i % 4) * 16,
+    size: i % 3 === 0 ? 5 : 3,
+    duration: 24 + (i % 6) * 2.5,
+    delay: -(i * 1.5),
+    opacity: 0.08 + (i % 3) * 0.05,
+  })),
+];
 
 function OrbitParticle({ angle, radius, size, duration, delay, opacity }: typeof ORBIT_PARTICLES[0]) {
   return (
@@ -98,7 +121,7 @@ function SpinningCube() {
   return (
     <div
       className="relative flex items-center justify-center select-none"
-      style={{ width: 500, height: 500 }}
+      style={{ width: 660, height: 660 }}
     >
       {/* Deep halo glow */}
       <motion.div
