@@ -10,10 +10,9 @@ import {
   ArrowRight,
   Code2,
   MonitorSmartphone,
-  Sparkles,
-  BoxSelect,
-  Smartphone,
   Cpu,
+  ShoppingBag,
+  Layers,
   Zap,
 } from "lucide-react";
 
@@ -32,35 +31,35 @@ const FACE_DEFS = [
   },
   {
     transform: `rotateY(180deg) translateZ(${HALF}px)`,
-    label: "Web Apps",
+    label: "Custom Apps",
     Icon: Code2,
     glow: "rgba(180,255,210,0.18)",
     bg: "rgba(255,255,255,0.05)",
   },
   {
     transform: `rotateY(90deg) translateZ(${HALF}px)`,
-    label: "Mobile",
-    Icon: Smartphone,
-    glow: "rgba(220,200,255,0.20)",
+    label: "AI Integration",
+    Icon: Cpu,
+    glow: "rgba(170,255,255,0.20)",
     bg: "rgba(255,255,255,0.06)",
   },
   {
     transform: `rotateY(-90deg) translateZ(${HALF}px)`,
-    label: "Brands",
-    Icon: BoxSelect,
-    glow: "rgba(255,200,200,0.18)",
+    label: "E-Commerce",
+    Icon: ShoppingBag,
+    glow: "rgba(255,230,170,0.18)",
     bg: "rgba(255,255,255,0.06)",
   },
   {
     transform: `rotateX(90deg) translateZ(${HALF}px)`,
-    label: "AI",
-    Icon: Cpu,
-    glow: "rgba(170,255,255,0.16)",
+    label: "Landing Pages",
+    Icon: Layers,
+    glow: "rgba(220,200,255,0.16)",
     bg: "rgba(255,255,255,0.05)",
   },
   {
     transform: `rotateX(-90deg) translateZ(${HALF}px)`,
-    label: "Whatever",
+    label: "Automations",
     Icon: Zap,
     glow: "rgba(255,255,180,0.16)",
     bg: "rgba(255,255,255,0.05)",
@@ -389,12 +388,12 @@ export function LandingPage() {
           </RevealText>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-y-16 gap-x-8 border-t border-white/10 pt-16">
             {[
-              { title: "Websites",  desc: "Cinematic, performant, emotionally resonant.",       Icon: MonitorSmartphone },
-              { title: "Web Apps",  desc: "Dashboards and SaaS tools that feel like products.", Icon: Code2 },
-              { title: "Mobile",    desc: "iOS & Android experiences people want to open.",     Icon: Smartphone },
-              { title: "Brands",    desc: "Visual identities that scale and are remembered.",   Icon: BoxSelect },
-              { title: "AI",        desc: "Smart integrations, generative UI, chatbots.",       Icon: Cpu },
-              { title: "Whatever",  desc: "The wildcard. Bring the brief.",                     Icon: Zap },
+              { title: "Websites",     desc: "Cinematic, performant, emotionally resonant.",                  Icon: MonitorSmartphone },
+              { title: "Custom Apps",  desc: "Bespoke web and SaaS products built around your workflow.",     Icon: Code2 },
+              { title: "AI Integration", desc: "LLM-powered features, chatbots, and smart automations.",     Icon: Cpu },
+              { title: "E-Commerce",  desc: "Storefronts that convert without feeling like stores.",          Icon: ShoppingBag },
+              { title: "Landing Pages", desc: "High-converting pages that look as good as they perform.",    Icon: Layers },
+              { title: "Automations", desc: "Marketing workflows, email sequences, and CRM integrations.",   Icon: Zap },
             ].map((item, idx) => (
               <RevealText key={item.title} delay={idx * 0.1}>
                 <motion.div className="group cursor-default" whileHover={{ y: -4 }} transition={{ duration: 0.3 }}>
