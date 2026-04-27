@@ -166,13 +166,13 @@ function SpinningCube() {
   return (
     <div
       className="relative flex items-center justify-center select-none"
-      style={{ width: 860, height: 860 }}
+      style={{ width: 620, height: 620 }}
     >
       {/* Halo */}
       <motion.div
         className="absolute rounded-full pointer-events-none"
         style={{
-          width: 540, height: 540,
+          width: 390, height: 390,
           background: "radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 40%, transparent 70%)",
           filter: "blur(32px)",
         }}
@@ -183,13 +183,13 @@ function SpinningCube() {
       {/* Pulse rings */}
       <motion.div
         className="absolute rounded-full border border-white/[0.06] pointer-events-none"
-        style={{ width: 490, height: 490 }}
+        style={{ width: 355, height: 355 }}
         animate={{ scale: [0.95, 1.15, 0.95], opacity: [0.4, 0, 0.4] }}
         transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute rounded-full border border-white/[0.04] pointer-events-none"
-        style={{ width: 590, height: 590 }}
+        style={{ width: 425, height: 425 }}
         animate={{ scale: [0.9, 1.2, 0.9], opacity: [0.3, 0, 0.3] }}
         transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
       />
@@ -204,7 +204,7 @@ function SpinningCube() {
         className="absolute pointer-events-none"
         style={{
           bottom: 20, left: "50%", transform: "translateX(-50%)",
-          width: 257, height: 36,
+          width: 185, height: 28,
           background: "radial-gradient(ellipse, rgba(255,255,255,0.07) 0%, transparent 70%)",
           filter: "blur(8px)",
         }}
@@ -216,7 +216,7 @@ function SpinningCube() {
       <motion.div
         className="absolute"
         style={{ width: FACE_SIZE, height: FACE_SIZE, perspective: 1800 }}
-        animate={{ y: [0, -18, 0] }}
+        animate={{ y: [0, -14, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
       >
         <motion.div
@@ -307,7 +307,7 @@ export default function Home() {
 
       {/* Hero */}
       <section className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 pt-20">
-        <div className="flex flex-col md:flex-row items-center justify-between w-full max-w-7xl mx-auto gap-8 md:gap-16">
+        <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-7xl mx-auto gap-8 md:gap-20">
           <div className="text-center md:text-left md:flex-1">
             <RevealText delay={0.3}>
               <h1 className="text-5xl md:text-7xl font-light tracking-tighter mb-6 whitespace-nowrap">
