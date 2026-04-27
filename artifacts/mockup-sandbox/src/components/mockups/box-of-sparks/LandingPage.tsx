@@ -59,7 +59,7 @@ const FACE_DEFS = [
   },
   {
     transform: `rotateX(-90deg) translateZ(${HALF}px)`,
-    label: "Automations",
+    label: "Marketing Automations",
     Icon: Zap,
     glow: "rgba(255,255,180,0.16)",
     bg: "rgba(255,255,255,0.05)",
@@ -393,7 +393,7 @@ export function LandingPage() {
               { title: "AI Integration", desc: "LLM-powered features, chatbots, and smart automations.",     Icon: Cpu },
               { title: "E-Commerce",  desc: "Storefronts that convert without feeling like stores.",          Icon: ShoppingBag },
               { title: "Landing Pages", desc: "High-converting pages that look as good as they perform.",    Icon: Layers },
-              { title: "Automations", desc: "Marketing workflows, email sequences, and CRM integrations.",   Icon: Zap },
+              { title: "Marketing Automations", desc: "Marketing workflows, email sequences, and CRM integrations.", Icon: Zap },
             ].map((item, idx) => (
               <RevealText key={item.title} delay={idx * 0.1}>
                 <motion.div className="group cursor-default" whileHover={{ y: -4 }} transition={{ duration: 0.3 }}>
