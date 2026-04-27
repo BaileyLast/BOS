@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 // ─── Cube geometry ─────────────────────────────────────────────────────────
-const FACE_SIZE = 280;
+const FACE_SIZE = 360;
 const HALF = FACE_SIZE / 2;
 const CUBE_SPIN_MS = 22000;
 
@@ -71,29 +71,29 @@ const ORBIT_PARTICLES = [
   ...Array.from({ length: 20 }, (_, i) => ({
     id: i,
     startAngle: (i / 20) * 360,
-    baseRadius: 172 + (i % 3) * 10,
+    baseRadius: 221 + (i % 3) * 13,
     orbitalDuration: 9000 + (i % 4) * 1100,
     size: i % 5 === 0 ? 3 : 2,
     opacity: 0.22 + (i % 3) * 0.07,
-    pushStrength: 38,
+    pushStrength: 49,
   })),
   ...Array.from({ length: 26 }, (_, i) => ({
     id: 100 + i,
     startAngle: (i / 26) * 360 + 7,
-    baseRadius: 220 + (i % 4) * 12,
+    baseRadius: 283 + (i % 4) * 15,
     orbitalDuration: 15000 + (i % 5) * 1600,
     size: i % 6 === 0 ? 4 : i % 3 === 0 ? 3 : 2,
     opacity: 0.14 + (i % 4) * 0.05,
-    pushStrength: 44,
+    pushStrength: 57,
   })),
   ...Array.from({ length: 18 }, (_, i) => ({
     id: 200 + i,
     startAngle: (i / 18) * 360 + 15,
-    baseRadius: 268 + (i % 4) * 14,
+    baseRadius: 344 + (i % 4) * 18,
     orbitalDuration: 23000 + (i % 6) * 2200,
     size: i % 3 === 0 ? 5 : 3,
     opacity: 0.09 + (i % 3) * 0.04,
-    pushStrength: 52,
+    pushStrength: 67,
   })),
 ];
 
@@ -164,13 +164,13 @@ function SpinningCube() {
   return (
     <div
       className="relative flex items-center justify-center select-none"
-      style={{ width: 680, height: 680 }}
+      style={{ width: 860, height: 860 }}
     >
       {/* Halo */}
       <motion.div
         className="absolute rounded-full pointer-events-none"
         style={{
-          width: 420, height: 420,
+          width: 540, height: 540,
           background: "radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 40%, transparent 70%)",
           filter: "blur(32px)",
         }}
@@ -181,13 +181,13 @@ function SpinningCube() {
       {/* Pulse rings */}
       <motion.div
         className="absolute rounded-full border border-white/[0.06] pointer-events-none"
-        style={{ width: 380, height: 380 }}
+        style={{ width: 490, height: 490 }}
         animate={{ scale: [0.95, 1.15, 0.95], opacity: [0.4, 0, 0.4] }}
         transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute rounded-full border border-white/[0.04] pointer-events-none"
-        style={{ width: 460, height: 460 }}
+        style={{ width: 590, height: 590 }}
         animate={{ scale: [0.9, 1.2, 0.9], opacity: [0.3, 0, 0.3] }}
         transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
       />
@@ -202,7 +202,7 @@ function SpinningCube() {
         className="absolute pointer-events-none"
         style={{
           bottom: 20, left: "50%", transform: "translateX(-50%)",
-          width: 200, height: 28,
+          width: 257, height: 36,
           background: "radial-gradient(ellipse, rgba(255,255,255,0.07) 0%, transparent 70%)",
           filter: "blur(8px)",
         }}
@@ -213,8 +213,8 @@ function SpinningCube() {
       {/* Cube — bob wrapper */}
       <motion.div
         className="absolute"
-        style={{ width: FACE_SIZE, height: FACE_SIZE, perspective: 1400 }}
-        animate={{ y: [0, -14, 0] }}
+        style={{ width: FACE_SIZE, height: FACE_SIZE, perspective: 1800 }}
+        animate={{ y: [0, -18, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
       >
         <motion.div
