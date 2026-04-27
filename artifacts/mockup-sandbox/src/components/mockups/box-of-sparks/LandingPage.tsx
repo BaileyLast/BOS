@@ -240,9 +240,9 @@ function SpinningCube() {
                   background: "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%, rgba(255,255,255,0.03) 100%)",
                 }}
               />
-              <div className="relative z-10 flex flex-col items-center text-white/85">
+              <div className="relative z-10 flex flex-col items-center text-white/85 px-4">
                 <face.Icon className="w-10 h-10 mb-4" strokeWidth={1} />
-                <span className="text-base font-extralight tracking-[0.3em] uppercase">
+                <span className="text-xs font-extralight tracking-[0.2em] uppercase text-center leading-relaxed">
                   {face.label}
                 </span>
               </div>
