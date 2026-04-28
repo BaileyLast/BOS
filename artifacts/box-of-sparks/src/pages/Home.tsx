@@ -451,18 +451,7 @@ export default function Home() {
                   Available for next project — {availableFrom}
                 </span>
               </div>
-              <h2 className="text-5xl md:text-8xl font-light tracking-tighter inline-flex items-baseline gap-1">
-                <span
-                  className="bg-clip-text text-transparent"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(120deg, #2a2a2a 0%, #5a5a5a 35%, #8a8a8a 55%, #5a5a5a 80%, #2a2a2a 100%)",
-                  }}
-                >
-                  Start a fire
-                </span>
-                <MiniCube />
-              </h2>
+              <h2 className="text-5xl md:text-8xl font-light tracking-tighter inline-flex items-baseline gap-1">Start a fire<MiniCube /></h2>
               <a
                 href="mailto:hello@boxofsparks.com"
                 className="inline-flex items-center gap-4 text-xl md:text-2xl font-light border-b border-white/25 pb-2 hover:border-white hover:gap-6 transition-all duration-300"
