@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   motion,
   useScroll,
@@ -286,6 +286,19 @@ export default function Home() {
     return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   })();
 
+  const manifestoRef = useRef<HTMLElement>(null);
+  const [navDark, setNavDark] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      const el = manifestoRef.current;
+      if (!el) return;
+      const { top, bottom } = el.getBoundingClientRect();
+      setNavDark(top <= 72 && bottom > 72);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div className="min-h-[100dvh] bg-[#0a0a0a] text-white selection:bg-white/20 font-sans overflow-x-hidden">
       {/* Noise */}
@@ -309,8 +322,8 @@ export default function Home() {
       {/* Navbar */}
       <nav className="fixed top-0 w-full z-50">
         <div className="max-w-7xl mx-auto px-6 py-8 flex justify-between items-center">
-          <div className="text-sm font-medium tracking-widest uppercase text-white/70">Box of Sparks</div>
-          <a href="#contact" className="text-sm font-medium tracking-widest uppercase text-white/70 hover:text-white transition-colors">
+          <div className={`text-sm font-medium tracking-widest uppercase transition-colors duration-300 ${navDark ? "text-[#0a0a0a]" : "text-white/70"}`}>Box of Sparks</div>
+          <a href="#contact" className={`text-sm font-medium tracking-widest uppercase transition-colors duration-300 ${navDark ? "text-[#0a0a0a] hover:text-black" : "text-white/70 hover:text-white"}`}>
             Contact
           </a>
         </div>
@@ -366,7 +379,7 @@ export default function Home() {
       </section>
 
       {/* Manifesto */}
-      <section className="relative z-10 py-48 px-6 bg-white text-[#0a0a0a]">
+      <section ref={manifestoRef} className="relative z-10 py-48 px-6 bg-white text-[#0a0a0a]">
         <div className="max-w-5xl mx-auto text-center">
           <RevealText>
             <h2 className="text-4xl md:text-7xl font-light tracking-tighter leading-tight">
