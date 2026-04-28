@@ -6,15 +6,7 @@ import {
   useMotionValue,
   useAnimationFrame,
 } from "framer-motion";
-import {
-  ArrowRight,
-  Code2,
-  MonitorSmartphone,
-  Cpu,
-  ShoppingBag,
-  Layers,
-  Zap,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 // ─── Cube geometry ─────────────────────────────────────────────────────────
 const FACE_SIZE = 360;
@@ -367,39 +359,6 @@ export default function Home() {
                   <h3 className="text-xl font-light tracking-widest uppercase">{item.title}</h3>
                   <p className="text-white/45 leading-relaxed font-light">{item.body}</p>
                 </div>
-              </RevealText>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Capabilities */}
-      <section className="relative z-10 py-32 px-6">
-        <div className="max-w-7xl mx-auto">
-          <RevealText>
-            <div className="text-xs font-medium tracking-widest uppercase text-white/35 mb-16">
-              Capabilities
-            </div>
-          </RevealText>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-y-16 gap-x-8 border-t border-white/10 pt-16">
-            {[
-              { title: "Websites",     desc: "Cinematic, performant, emotionally resonant.",                  Icon: MonitorSmartphone },
-              { title: "Custom Apps",  desc: "Bespoke web and SaaS products built around your workflow.",     Icon: Code2 },
-              { title: "AI Integration", desc: "LLM-powered features, chatbots, and smart automations.",     Icon: Cpu },
-              { title: "E-Commerce",  desc: "Storefronts that convert without feeling like stores.",          Icon: ShoppingBag },
-              { title: "Landing Pages", desc: "High-converting pages that look as good as they perform.",    Icon: Layers },
-              { title: "Marketing Automations", desc: "Marketing workflows, email sequences, and CRM integrations.", Icon: Zap },
-            ].map((item, idx) => (
-              <RevealText key={item.title} delay={idx * 0.1}>
-                <motion.div className="group cursor-default" whileHover={{ y: -4 }} transition={{ duration: 0.3 }}>
-                  <div className="mb-6 text-white/25 group-hover:text-white/80 transition-colors duration-500">
-                    <item.Icon className="w-6 h-6" strokeWidth={1} />
-                  </div>
-                  <h4 className="text-2xl font-light mb-4">{item.title}</h4>
-                  <p className="text-white/35 leading-relaxed font-light group-hover:text-white/65 transition-colors duration-500">
-                    {item.desc}
-                  </p>
-                </motion.div>
               </RevealText>
             ))}
           </div>
