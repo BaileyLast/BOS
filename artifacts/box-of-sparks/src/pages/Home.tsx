@@ -431,7 +431,7 @@ export default function Home() {
             <h2 className="text-4xl md:text-7xl font-light tracking-tighter leading-tight">
               The world has enough genericness.
               <br className="hidden md:block" />
-              <span className="italic font-serif">Let's spark something rare.</span>
+              <span className="italic font-serif">Let's spark something brilliant.</span>
             </h2>
           </RevealText>
         </div>
