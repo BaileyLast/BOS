@@ -386,22 +386,6 @@ export default function Home() {
       {/* Hero */}
       <section className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 text-center">
         <motion.div
-          className="inline-flex items-center justify-center px-6 py-3 border border-white/10 rounded-full mb-10"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
-        >
-          <motion.div
-            className="w-2 h-2 rounded-full bg-white mr-3"
-            animate={{ opacity: [1, 0.2, 1] }}
-            transition={{ duration: 1.8, repeat: Infinity }}
-          />
-          <span className="text-sm font-medium tracking-widest uppercase text-white/75">
-            Available for next project — {availableFrom}
-          </span>
-        </motion.div>
-
-        <motion.div
           initial={{ opacity: 0, scale: 0.88 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
@@ -465,6 +449,16 @@ export default function Home() {
       <section id="contact" className="relative z-10 py-32 px-6 border-b border-white/5">
         <div className="max-w-4xl mx-auto text-center">
           <RevealText>
+            <div className="inline-flex items-center justify-center px-6 py-3 border border-white/10 rounded-full mb-12">
+              <motion.div
+                className="w-2 h-2 rounded-full bg-white mr-3"
+                animate={{ opacity: [1, 0.2, 1] }}
+                transition={{ duration: 1.8, repeat: Infinity }}
+              />
+              <span className="text-sm font-medium tracking-widest uppercase text-white/75">
+                Available for next project — {availableFrom}
+              </span>
+            </div>
             <h2 className="text-5xl md:text-8xl font-light tracking-tighter mb-12 inline-flex items-center gap-3">Start a fire<MiniCube /></h2>
             <a
               href="mailto:hello@boxofsparks.com"
