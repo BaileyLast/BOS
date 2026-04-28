@@ -456,7 +456,7 @@ export default function Home() {
                   className="bg-clip-text text-transparent"
                   style={{
                     backgroundImage:
-                      "linear-gradient(120deg, rgb(200,220,255) 0%, rgb(180,255,210) 22%, rgb(170,255,255) 42%, rgb(220,200,255) 62%, rgb(255,200,200) 82%, rgb(255,255,180) 100%)",
+                      "linear-gradient(120deg, #2a2a2a 0%, #5a5a5a 35%, #8a8a8a 55%, #5a5a5a 80%, #2a2a2a 100%)",
                   }}
                 >
                   Start a fire
