@@ -454,10 +454,10 @@ export default function Home() {
               </div>
               <h2 className="text-5xl md:text-8xl font-light tracking-tighter inline-flex items-baseline gap-1">Start a fire<MiniCube /></h2>
               <a
-                href="mailto:hello@boxofsparks.com"
+                href="mailto:hello@boxofsparks.co.uk"
                 className="inline-flex items-center gap-4 text-xl md:text-2xl font-light border-b border-white/25 pb-2 hover:border-white hover:gap-6 transition-all duration-300"
               >
-                hello@boxofsparks.com <ArrowRight strokeWidth={1} className="w-6 h-6" />
+                hello@boxofsparks.co.uk <ArrowRight strokeWidth={1} className="w-6 h-6" />
               </a>
             </div>
           </RevealText>
