@@ -396,7 +396,7 @@ export default function Home() {
           </h1>
         </RevealText>
         <RevealText delay={0.7}>
-          <p className="text-lg md:text-xl text-white/45 font-light max-w-xl leading-relaxed">Our 2 man creative agency crafts websites, apps, and everything in between. </p>
+          <p className="text-lg md:text-xl text-white/45 font-light max-w-xl leading-relaxed">Our creative agency crafts websites, apps, and everything in between. </p>
         </RevealText>
       </section>
       {/* What We Do */}
