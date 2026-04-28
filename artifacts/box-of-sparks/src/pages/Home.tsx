@@ -263,7 +263,7 @@ function SpinningCube() {
 }
 
 // ─── Mini cube (inline punctuation) ────────────────────────────────────────
-const MINI_FACE = 52;
+const MINI_FACE = 20;
 const MINI_HALF = MINI_FACE / 2;
 const MINI_FACE_DEFS = [
   { transform: `translateZ(${MINI_HALF}px)`,                glow: "rgba(200,220,255,0.22)", bg: "rgba(255,255,255,0.07)" },
@@ -289,8 +289,8 @@ function MiniCube() {
 
   return (
     <span
-      className="inline-block select-none align-middle"
-      style={{ width: MINI_FACE + 20, height: MINI_FACE + 20, perspective: 320, verticalAlign: "middle" }}
+      className="inline-block select-none"
+      style={{ width: MINI_FACE + 8, height: MINI_FACE + 8, perspective: 120, verticalAlign: "baseline", marginBottom: "-2px" }}
     >
       <motion.span
         className="block w-full h-full relative"
@@ -301,13 +301,13 @@ function MiniCube() {
             key={i}
             className="absolute"
             style={{
-              inset: 10,
+              inset: 4,
               display: "block",
               transform: face.transform,
               background: face.bg,
-              backdropFilter: "blur(10px)",
-              border: "1px solid rgba(255,255,255,0.14)",
-              boxShadow: `inset 0 0 14px ${face.glow}, 0 0 8px ${face.glow}`,
+              backdropFilter: "blur(6px)",
+              border: "1px solid rgba(255,255,255,0.18)",
+              boxShadow: `inset 0 0 6px ${face.glow}, 0 0 4px ${face.glow}`,
             }}
           />
         ))}
@@ -460,7 +460,7 @@ export default function Home() {
                   Available for next project — {availableFrom}
                 </span>
               </div>
-              <h2 className="text-5xl md:text-8xl font-light tracking-tighter inline-flex items-center gap-3">Start a fire<MiniCube /></h2>
+              <h2 className="text-5xl md:text-8xl font-light tracking-tighter inline-flex items-baseline gap-1">Start a fire<MiniCube /></h2>
               <a
                 href="mailto:hello@boxofsparks.com"
                 className="inline-flex items-center gap-4 text-xl md:text-2xl font-light border-b border-white/25 pb-2 hover:border-white hover:gap-6 transition-all duration-300"
