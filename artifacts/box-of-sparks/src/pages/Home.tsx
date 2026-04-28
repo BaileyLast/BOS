@@ -379,9 +379,20 @@ export default function Home() {
             href="#contact"
             onClick={(e) => {
               e.preventDefault();
-              document
-                .getElementById("contact")
-                ?.scrollIntoView({ behavior: "smooth", block: "start" });
+              const target = document.getElementById("contact");
+              if (!target) return;
+              const startY = window.scrollY;
+              const endY = startY + target.getBoundingClientRect().top;
+              const distance = endY - startY;
+              const duration = 2200;
+              const startTime = performance.now();
+              const ease = (t: number) => 1 - Math.pow(1 - t, 4);
+              const step = (now: number) => {
+                const t = Math.min(1, (now - startTime) / duration);
+                window.scrollTo(0, startY + distance * ease(t));
+                if (t < 1) requestAnimationFrame(step);
+              };
+              requestAnimationFrame(step);
             }}
             className={`text-sm font-medium tracking-widest uppercase transition-colors duration-300 ${navDark ? "text-[#0a0a0a] hover:text-black" : "text-white/70 hover:text-white"}`}
           >
