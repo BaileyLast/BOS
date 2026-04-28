@@ -429,9 +429,9 @@ export default function Home() {
         <div className="max-w-5xl mx-auto text-center">
           <RevealText>
             <h2 className="text-4xl md:text-7xl font-light tracking-tighter leading-tight">
-              The world has enough generic software.
+              The world has enough genericness.
               <br className="hidden md:block" />
-              <span className="italic font-serif">Let's build something beautiful.</span>
+              <span className="italic font-serif">Let's spark something worth remembering.</span>
             </h2>
           </RevealText>
         </div>
