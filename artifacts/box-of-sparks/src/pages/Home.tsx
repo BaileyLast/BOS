@@ -263,7 +263,7 @@ function SpinningCube() {
 }
 
 // ─── Mini cube (inline punctuation) ────────────────────────────────────────
-const MINI_FACE = 12;
+const MINI_FACE = 10;
 const MINI_HALF = MINI_FACE / 2;
 const MINI_FACE_DEFS = [
   { transform: `translateZ(${MINI_HALF}px)`,                glow: "rgba(200,220,255,0.22)", bg: "rgba(255,255,255,0.07)" },
