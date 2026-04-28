@@ -343,13 +343,6 @@ export default function Home() {
       {/* What We Do */}
       <section className="relative z-10 py-32 px-6 border-t border-white/5">
         <div className="max-w-4xl mx-auto">
-          <RevealText>
-            <h2 className="text-3xl md:text-5xl font-light tracking-tight mb-16 text-white/80">
-              The anti-agency agency.
-              <br />
-              <span className="text-white">One mind. Zero friction.</span>
-            </h2>
-          </RevealText>
           <div className="grid md:grid-cols-2 gap-12 md:gap-24">
             {[
               {
