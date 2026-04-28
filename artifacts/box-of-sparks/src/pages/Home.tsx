@@ -449,23 +449,25 @@ export default function Home() {
       <section id="contact" className="relative z-10 py-32 px-6 border-b border-white/5">
         <div className="max-w-4xl mx-auto text-center">
           <RevealText>
-            <div className="inline-flex items-center justify-center px-6 py-3 border border-white/10 rounded-full mb-12">
-              <motion.div
-                className="w-2 h-2 rounded-full bg-white mr-3"
-                animate={{ opacity: [1, 0.2, 1] }}
-                transition={{ duration: 1.8, repeat: Infinity }}
-              />
-              <span className="text-sm font-medium tracking-widest uppercase text-white/75">
-                Available for next project — {availableFrom}
-              </span>
+            <div className="flex flex-col items-center gap-12">
+              <div className="inline-flex items-center justify-center px-6 py-3 border border-white/10 rounded-full">
+                <motion.div
+                  className="w-2 h-2 rounded-full bg-white mr-3"
+                  animate={{ opacity: [1, 0.2, 1] }}
+                  transition={{ duration: 1.8, repeat: Infinity }}
+                />
+                <span className="text-sm font-medium tracking-widest uppercase text-white/75">
+                  Available for next project — {availableFrom}
+                </span>
+              </div>
+              <h2 className="text-5xl md:text-8xl font-light tracking-tighter inline-flex items-center gap-3">Start a fire<MiniCube /></h2>
+              <a
+                href="mailto:hello@boxofsparks.com"
+                className="inline-flex items-center gap-4 text-xl md:text-2xl font-light border-b border-white/25 pb-2 hover:border-white hover:gap-6 transition-all duration-300"
+              >
+                hello@boxofsparks.com <ArrowRight strokeWidth={1} className="w-6 h-6" />
+              </a>
             </div>
-            <h2 className="text-5xl md:text-8xl font-light tracking-tighter mb-12 inline-flex items-center gap-3">Start a fire<MiniCube /></h2>
-            <a
-              href="mailto:hello@boxofsparks.com"
-              className="inline-flex items-center gap-4 text-xl md:text-2xl font-light border-b border-white/25 pb-2 hover:border-white hover:gap-6 transition-all duration-300"
-            >
-              hello@boxofsparks.com <ArrowRight strokeWidth={1} className="w-6 h-6" />
-            </a>
           </RevealText>
         </div>
       </section>
