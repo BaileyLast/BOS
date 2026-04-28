@@ -280,6 +280,11 @@ function RevealText({ children, delay = 0 }: { children: React.ReactNode; delay?
 export default function Home() {
   const { scrollYProgress } = useScroll();
   const yBackground = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const availableFrom = (() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 3);
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  })();
 
   return (
     <div className="min-h-[100dvh] bg-[#0a0a0a] text-white selection:bg-white/20 font-sans overflow-x-hidden">
@@ -390,11 +395,7 @@ export default function Home() {
                 transition={{ duration: 1.8, repeat: Infinity }}
               />
               <span className="text-sm font-medium tracking-widest uppercase text-white/75">
-                Available from {(() => {
-                  const d = new Date();
-                  d.setDate(d.getDate() + 3);
-                  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-                })()}
+                Available from {availableFrom}
               </span>
             </div>
             <h2 className="text-5xl md:text-8xl font-light tracking-tighter mb-12">Start a fire.</h2>
