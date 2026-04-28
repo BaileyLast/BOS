@@ -263,7 +263,7 @@ function SpinningCube() {
 }
 
 // ─── Mini cube (inline punctuation) ────────────────────────────────────────
-const MINI_FACE = 20;
+const MINI_FACE = 12;
 const MINI_HALF = MINI_FACE / 2;
 const MINI_FACE_DEFS = [
   { transform: `translateZ(${MINI_HALF}px)`,                glow: "rgba(200,220,255,0.22)", bg: "rgba(255,255,255,0.07)" },
@@ -290,7 +290,7 @@ function MiniCube() {
   return (
     <span
       className="inline-block select-none"
-      style={{ width: MINI_FACE + 8, height: MINI_FACE + 8, perspective: 120, verticalAlign: "baseline", marginBottom: "-2px" }}
+      style={{ width: MINI_FACE + 6, height: MINI_FACE + 6, perspective: 72, verticalAlign: "baseline", marginBottom: "-1px" }}
     >
       <motion.span
         className="block w-full h-full relative"
@@ -301,7 +301,7 @@ function MiniCube() {
             key={i}
             className="absolute"
             style={{
-              inset: 4,
+              inset: 3,
               display: "block",
               transform: face.transform,
               background: face.bg,
