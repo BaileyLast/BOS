@@ -307,42 +307,36 @@ export default function Home() {
       />
 
       {/* Navbar */}
-      <nav className="fixed top-0 w-full z-50 mix-blend-difference">
+      <nav className="fixed top-0 w-full z-50">
         <div className="max-w-7xl mx-auto px-6 py-8 flex justify-between items-center">
-          <div className="text-sm font-medium tracking-widest uppercase">Box of Sparks</div>
-          <a href="#contact" className="text-sm font-medium tracking-widest uppercase hover:opacity-70 transition-opacity">
+          <div className="text-sm font-medium tracking-widest uppercase text-white/70">Box of Sparks</div>
+          <a href="#contact" className="text-sm font-medium tracking-widest uppercase text-white/70 hover:text-white transition-colors">
             Contact
           </a>
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 pt-20">
-        <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-7xl mx-auto gap-8 md:gap-20">
-          <div className="text-center md:text-left md:flex-1">
-            <RevealText delay={0.3}>
-              <h1 className="text-5xl md:text-7xl font-light tracking-tighter mb-6 whitespace-nowrap">
-                We build <span className="text-white/35 italic">ideas.</span>
-              </h1>
-            </RevealText>
-            <RevealText delay={0.5}>
-              <p className="text-lg md:text-xl text-white/45 font-light max-w-xl mx-auto md:mx-0 leading-relaxed">
-                A solo creative studio crafting websites, apps, and brands that make people stop
-                and stare. Sharp, self-aware, and quietly confident.
-              </p>
-            </RevealText>
-          </div>
+      <section className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 text-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.88 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <SpinningCube />
+        </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.88 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="md:flex-1 flex justify-center"
-          >
-            <SpinningCube />
-          </motion.div>
-        </div>
-
+        <RevealText delay={0.5}>
+          <h1 className="text-5xl md:text-7xl font-light tracking-tighter mt-4 mb-6">
+            We build <span className="text-white/35 italic">ideas.</span>
+          </h1>
+        </RevealText>
+        <RevealText delay={0.7}>
+          <p className="text-lg md:text-xl text-white/45 font-light max-w-xl leading-relaxed">
+            A solo creative studio crafting websites, apps, and brands that make people stop
+            and stare. Sharp, self-aware, and quietly confident.
+          </p>
+        </RevealText>
       </section>
 
       {/* What We Do */}
