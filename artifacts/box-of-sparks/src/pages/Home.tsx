@@ -262,6 +262,60 @@ function SpinningCube() {
   );
 }
 
+// ─── Mini cube (inline punctuation) ────────────────────────────────────────
+const MINI_FACE = 52;
+const MINI_HALF = MINI_FACE / 2;
+const MINI_FACE_DEFS = [
+  { transform: `translateZ(${MINI_HALF}px)`,                glow: "rgba(200,220,255,0.22)", bg: "rgba(255,255,255,0.07)" },
+  { transform: `rotateY(180deg) translateZ(${MINI_HALF}px)`, glow: "rgba(180,255,210,0.18)", bg: "rgba(255,255,255,0.05)" },
+  { transform: `rotateY(90deg) translateZ(${MINI_HALF}px)`,  glow: "rgba(220,200,255,0.20)", bg: "rgba(255,255,255,0.06)" },
+  { transform: `rotateY(-90deg) translateZ(${MINI_HALF}px)`, glow: "rgba(255,200,200,0.18)", bg: "rgba(255,255,255,0.06)" },
+  { transform: `rotateX(90deg) translateZ(${MINI_HALF}px)`,  glow: "rgba(170,255,255,0.16)", bg: "rgba(255,255,255,0.05)" },
+  { transform: `rotateX(-90deg) translateZ(${MINI_HALF}px)`, glow: "rgba(255,255,180,0.16)", bg: "rgba(255,255,255,0.05)" },
+];
+
+function MiniCube() {
+  const cubeAngle = useMotionValue(CUBE_INIT_Y);
+  const cubeAngleX = useMotionValue(CUBE_INIT_X);
+  const startRef = useRef<number | null>(null);
+  useAnimationFrame((t) => {
+    if (startRef.current === null) startRef.current = t;
+    const elapsed = t - startRef.current;
+    cubeAngle.set(CUBE_INIT_Y + (elapsed / CUBE_SPIN_MS) * 360);
+    cubeAngleX.set(CUBE_INIT_X + (elapsed / CUBE_SPIN_MS) * 360 * 0.618);
+  });
+  const rotateY = useTransform(cubeAngle, (a) => a % 360);
+  const rotateX = useTransform(cubeAngleX, (a) => a % 360);
+
+  return (
+    <span
+      className="inline-block select-none align-middle"
+      style={{ width: MINI_FACE + 20, height: MINI_FACE + 20, perspective: 320, verticalAlign: "middle" }}
+    >
+      <motion.span
+        className="block w-full h-full relative"
+        style={{ transformStyle: "preserve-3d", rotateY, rotateX }}
+      >
+        {MINI_FACE_DEFS.map((face, i) => (
+          <span
+            key={i}
+            className="absolute"
+            style={{
+              inset: 10,
+              display: "block",
+              transform: face.transform,
+              background: face.bg,
+              backdropFilter: "blur(10px)",
+              border: "1px solid rgba(255,255,255,0.14)",
+              boxShadow: `inset 0 0 14px ${face.glow}, 0 0 8px ${face.glow}`,
+            }}
+          />
+        ))}
+      </motion.span>
+    </span>
+  );
+}
+
 // ─── Helpers ───────────────────────────────────────────────────────────────
 function RevealText({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   return (
@@ -405,7 +459,7 @@ export default function Home() {
                 Available for next project — {availableFrom}
               </span>
             </div>
-            <h2 className="text-5xl md:text-8xl font-light tracking-tighter mb-12">Start a fire.</h2>
+            <h2 className="text-5xl md:text-8xl font-light tracking-tighter mb-12 inline-flex items-center gap-3">Start a fire<MiniCube /></h2>
             <a
               href="mailto:hello@boxofsparks.com"
               className="inline-flex items-center gap-4 text-xl md:text-2xl font-light border-b border-white/25 pb-2 hover:border-white hover:gap-6 transition-all duration-300"
