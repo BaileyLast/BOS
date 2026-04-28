@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   motion,
   useScroll,
@@ -152,12 +152,18 @@ function OrbitParticle({
 }
 
 // ─── Spinning cube ─────────────────────────────────────────────────────────
+const CUBE_INIT_Y = 22;
+const CUBE_INIT_X = 13;
+
 function SpinningCube() {
-  const cubeAngle = useMotionValue(0);
-  const cubeAngleX = useMotionValue(0);
+  const cubeAngle = useMotionValue(CUBE_INIT_Y);
+  const cubeAngleX = useMotionValue(CUBE_INIT_X);
+  const startRef = useRef<number | null>(null);
   useAnimationFrame((t) => {
-    cubeAngle.set((t / CUBE_SPIN_MS) * 360);
-    cubeAngleX.set((t / CUBE_SPIN_MS) * 360 * 0.618);
+    if (startRef.current === null) startRef.current = t;
+    const elapsed = t - startRef.current;
+    cubeAngle.set(CUBE_INIT_Y + (elapsed / CUBE_SPIN_MS) * 360);
+    cubeAngleX.set(CUBE_INIT_X + (elapsed / CUBE_SPIN_MS) * 360 * 0.618);
   });
 
   const rotateY = useTransform(cubeAngle, (a) => a % 360);
