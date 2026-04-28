@@ -468,16 +468,15 @@ export default function Home() {
     // when no other JS forces layout in between, and React skips re-renders
     // when navDark doesn't actually change — so this stays effectively free
     // while remaining correct for instant/programmatic scrolls.
-    let ticking = false;
+    let rafId: number | null = null;
     const update = () => {
-      ticking = false;
+      rafId = null;
       const { top, bottom } = el.getBoundingClientRect();
       setNavDark(top <= 72 && bottom > 72);
     };
     const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(update);
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(update);
     };
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -485,6 +484,7 @@ export default function Home() {
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
     };
   }, []);
 
