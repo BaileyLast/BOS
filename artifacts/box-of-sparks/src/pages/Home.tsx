@@ -390,7 +390,11 @@ export default function Home() {
                 transition={{ duration: 1.8, repeat: Infinity }}
               />
               <span className="text-sm font-medium tracking-widest uppercase text-white/75">
-                Available for new projects
+                Available from {(() => {
+                  const d = new Date();
+                  d.setDate(d.getDate() + 3);
+                  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+                })()}
               </span>
             </div>
             <h2 className="text-5xl md:text-8xl font-light tracking-tighter mb-12">Start a fire.</h2>
