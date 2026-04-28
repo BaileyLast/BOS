@@ -475,11 +475,6 @@ export default function Home() {
       {/* Footer */}
       <footer className="relative z-10 py-8 px-6 text-white/25 text-sm font-light uppercase tracking-widest flex flex-col md:flex-row justify-between items-center gap-4">
         <div>© {new Date().getFullYear()} Box of Sparks</div>
-        <div className="flex gap-8">
-          <a href="#" className="hover:text-white transition-colors">Twitter</a>
-          <a href="#" className="hover:text-white transition-colors">Read.cv</a>
-          <a href="#" className="hover:text-white transition-colors">Github</a>
-        </div>
         <div>All rights reserved.</div>
       </footer>
     </div>
