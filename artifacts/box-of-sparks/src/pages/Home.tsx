@@ -443,9 +443,10 @@ export default function Home() {
             <div className="flex flex-col items-center gap-12">
               <div className="inline-flex items-center justify-center px-6 py-3 border border-white/10 rounded-full">
                 <motion.div
-                  className="w-2 h-2 rounded-full bg-white mr-3"
+                  className="w-2 h-2 rounded-full bg-amber-400 mr-3"
                   animate={{ opacity: [1, 0.2, 1] }}
                   transition={{ duration: 1.8, repeat: Infinity }}
+                  style={{ boxShadow: "0 0 8px rgba(251,191,36,0.6)" }}
                 />
                 <span className="text-sm font-medium tracking-widest uppercase text-white/75">
                   Available for next project — {availableFrom}
