@@ -2,8 +2,6 @@ import React, { useRef, useState, useEffect } from "react";
 import {
   motion,
   motionValue,
-  useScroll,
-  useTransform,
   useMotionValue,
   useAnimationFrame,
   useReducedMotion,
@@ -455,10 +453,6 @@ function RevealText({ children, delay = 0 }: { children: React.ReactNode; delay?
 
 // ─── Page ──────────────────────────────────────────────────────────────────
 export default function Home() {
-  const reducedMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll();
-  const yBackgroundRaw = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const yBackground = reducedMotion ? "0%" : yBackgroundRaw;
   const availableFrom = (() => {
     const d = new Date();
     d.setDate(d.getDate() + 3);
@@ -468,14 +462,30 @@ export default function Home() {
   const manifestoRef = useRef<HTMLElement>(null);
   const [navDark, setNavDark] = useState(false);
   useEffect(() => {
-    const handleScroll = () => {
-      const el = manifestoRef.current;
-      if (!el) return;
+    const el = manifestoRef.current;
+    if (!el) return;
+    // rAF-throttled, passive scroll handler. getBoundingClientRect is cheap
+    // when no other JS forces layout in between, and React skips re-renders
+    // when navDark doesn't actually change — so this stays effectively free
+    // while remaining correct for instant/programmatic scrolls.
+    let ticking = false;
+    const update = () => {
+      ticking = false;
       const { top, bottom } = el.getBoundingClientRect();
       setNavDark(top <= 72 && bottom > 72);
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   return (
@@ -487,11 +497,10 @@ export default function Home() {
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
         }}
       />
-      <motion.div
+      <div
         className="fixed top-0 left-0 right-0 h-[600px] pointer-events-none z-0"
         style={{
           background: "radial-gradient(circle at 50% 0%, rgba(255,255,255,0.035) 0%, transparent 70%)",
-          y: yBackground,
         }}
       />
       {/* Navbar */}
@@ -525,13 +534,17 @@ export default function Home() {
       </nav>
       {/* Hero */}
       <section className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 text-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.88 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <SpinningCube />
-        </motion.div>
+        {/* GPU-promoted layer wrapper: keeps the cube on its own composited
+            layer so scrolling just translates it instead of re-rasterizing. */}
+        <div style={{ willChange: "transform", transform: "translateZ(0)" }}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.88 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <SpinningCube />
+          </motion.div>
+        </div>
 
         <RevealText delay={0.5}>
           <h1 className="text-5xl md:text-7xl font-light tracking-tighter mt-4 mb-6">
