@@ -395,7 +395,7 @@ export default function Home() {
                 transition={{ duration: 1.8, repeat: Infinity }}
               />
               <span className="text-sm font-medium tracking-widest uppercase text-white/75">
-                Available from {availableFrom}
+                Available for next project — {availableFrom}
               </span>
             </div>
             <h2 className="text-5xl md:text-8xl font-light tracking-tighter mb-12">Start a fire.</h2>
