@@ -410,7 +410,7 @@ export default function Home() {
               },
               {
                 title: "The Output",
-                body: "Products that feel alive. Interfaces that respect the user. Brands with a pulse. We don't just build things to work — we build things to be remembered. Pure craftsmanship.",
+                body: "A final product you will be happy to place your name on, with ongoing helpful support.",
               },
             ].map((item, i) => (
               <RevealText key={item.title} delay={i * 0.15}>
