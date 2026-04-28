@@ -406,7 +406,7 @@ export default function Home() {
             {[
               {
                 title: "The Approach",
-                body: "No account managers, no bloated timelines. Just a direct line to the person building your product. Every detail considered, every pixel intentional. We ship fast, and we ship beautifully.",
+                body: "No account managers, no big timelines. Just a direct line to the person building your product.",
               },
               {
                 title: "The Output",
