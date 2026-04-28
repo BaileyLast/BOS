@@ -375,7 +375,16 @@ export default function Home() {
       <nav className="fixed top-0 w-full z-50">
         <div className="max-w-7xl mx-auto px-6 py-8 flex justify-between items-center">
           <div className={`text-sm font-medium tracking-widest uppercase transition-colors duration-300 ${navDark ? "text-[#0a0a0a]" : "text-white/70"}`}>Box of Sparks</div>
-          <a href="#contact" className={`text-sm font-medium tracking-widest uppercase transition-colors duration-300 ${navDark ? "text-[#0a0a0a] hover:text-black" : "text-white/70 hover:text-white"}`}>
+          <a
+            href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              document
+                .getElementById("contact")
+                ?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}
+            className={`text-sm font-medium tracking-widest uppercase transition-colors duration-300 ${navDark ? "text-[#0a0a0a] hover:text-black" : "text-white/70 hover:text-white"}`}
+          >
             Contact
           </a>
         </div>
