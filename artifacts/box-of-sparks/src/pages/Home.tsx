@@ -6,7 +6,15 @@ import {
   useMotionValue,
   useAnimationFrame,
 } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import {
+  ArrowRight,
+  Code2,
+  MonitorSmartphone,
+  Cpu,
+  ShoppingBag,
+  Layers,
+  Zap,
+} from "lucide-react";
 
 // ─── Cube geometry ─────────────────────────────────────────────────────────
 const FACE_SIZE = 360;
