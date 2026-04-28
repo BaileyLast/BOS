@@ -364,7 +364,6 @@ export default function Home() {
           }}
         />
       </div>
-
       <motion.div
         className="fixed top-0 left-0 right-0 h-[600px] pointer-events-none z-0"
         style={{
@@ -372,7 +371,6 @@ export default function Home() {
           y: yBackground,
         }}
       />
-
       {/* Navbar */}
       <nav className="fixed top-0 w-full z-50">
         <div className="max-w-7xl mx-auto px-6 py-8 flex justify-between items-center">
@@ -382,7 +380,6 @@ export default function Home() {
           </a>
         </div>
       </nav>
-
       {/* Hero */}
       <section className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 text-center">
         <motion.div
@@ -399,13 +396,9 @@ export default function Home() {
           </h1>
         </RevealText>
         <RevealText delay={0.7}>
-          <p className="text-lg md:text-xl text-white/45 font-light max-w-xl leading-relaxed">
-            A solo creative studio crafting websites, apps, and brands that make people stop
-            and stare. Sharp, self-aware, and quietly confident.
-          </p>
+          <p className="text-lg md:text-xl text-white/45 font-light max-w-xl leading-relaxed">Our 2 man creative agency crafts websites, apps, and everything in between. </p>
         </RevealText>
       </section>
-
       {/* What We Do */}
       <section className="relative z-10 py-32 px-6 border-t border-white/5">
         <div className="max-w-4xl mx-auto">
@@ -431,7 +424,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Manifesto */}
       <section ref={manifestoRef} className="relative z-10 py-48 px-6 bg-white text-[#0a0a0a]">
         <div className="max-w-5xl mx-auto text-center">
@@ -444,7 +436,6 @@ export default function Home() {
           </RevealText>
         </div>
       </section>
-
       {/* CTA */}
       <section id="contact" className="relative z-10 py-32 px-6 border-b border-white/5">
         <div className="max-w-4xl mx-auto text-center">
@@ -471,7 +462,6 @@ export default function Home() {
           </RevealText>
         </div>
       </section>
-
       {/* Footer */}
       <footer className="relative z-10 py-8 px-6 text-white/25 text-sm font-light uppercase tracking-widest flex flex-col md:flex-row justify-between items-center gap-4">
         <div>© {new Date().getFullYear()} Box of Sparks</div>
