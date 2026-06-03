@@ -585,7 +585,7 @@ export default function Home() {
         <div className="max-w-5xl mx-auto text-center">
           <RevealText>
             <h2 className="text-4xl md:text-7xl font-light tracking-tighter leading-tight">
-              The world has enough genericness.
+              The world has enough genericness.{" "}
               <br className="hidden md:block" />
               <span className="italic font-serif">Let's spark something brilliant.</span>
             </h2>
@@ -605,7 +605,8 @@ export default function Home() {
                   style={{ boxShadow: "0 0 8px rgba(251,191,36,0.6)" }}
                 />
                 <span className="text-sm font-medium tracking-widest uppercase text-white/75">
-                  Available for next project — {availableFrom}
+                  Available for next project —{" "}
+                  <span className="whitespace-nowrap">{availableFrom}</span>
                 </span>
               </div>
               <h2 className="text-5xl md:text-8xl font-light tracking-tighter inline-flex items-baseline gap-1">Start a fire<MiniCube /></h2>
